@@ -1,25 +1,16 @@
 "use strict";
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("Posts", {
+    await queryInterface.createTable("Roles", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      content: {
-        type: Sequelize.TEXT,
-      },
-      imagePath: {
+      role_Name: {
         type: Sequelize.STRING,
-      },
-      postStatus: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: "0",
-      },
-      UserId: {
-        type: Sequelize.INTEGER,
+        unique: true,
       },
       createdAt: {
         allowNull: false,
@@ -34,6 +25,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("Posts");
+    await queryInterface.dropTable("Roles");
   },
 };

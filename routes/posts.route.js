@@ -2,16 +2,20 @@ const postControllers = require("../controllers/post.controller");
 const { Router } = require("express");
 const router = Router();
 const service = require("../middlewares/s3Service");
+const verifyToken = require("../middlewares/verifyToken");
 
 router
   .route("/")
-  .get(postControllers.getAllPosts)
-  .post(service.uploadImage().single("imagePath"), postControllers.createPost);
+  .get(verifyToken, postControllers.getAllOwnPosts)
+  .post(
+    verifyToken,
+    service.uploadImage().single("imagePath"),
+    postControllers.createPost
+  );
 
 router
   .route("/:id")
-  .get(postControllers.getPostById)
-  // .put(postControllers.updatePost)
-  .delete(postControllers.deletePost);
-
+  .get(verifyToken, postControllers.getPostById)
+  .put(verifyToken, postControllers.updatePost)
+  .delete(verifyToken, postControllers.deletePost);
 module.exports = router;
