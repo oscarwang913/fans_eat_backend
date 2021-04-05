@@ -121,8 +121,11 @@ const postControllers = {
   },
   createPost: (req, res) => {
     if (!req.body.content || !req.file) {
-      return res.status(422).json({ message: "Please fill the content" });
+      return res
+        .status(422)
+        .json({ message: "Please fill the content or invalid file type" });
     }
+
     // put the userid which is in the isAuth into the UserId for connecting post and verified user
     Post.create({
       content: req.body.content,

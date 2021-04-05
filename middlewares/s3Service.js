@@ -12,6 +12,18 @@ aws.config.update({
 
 const s3 = new aws.S3();
 
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype === "image/jpeg" ||
+    file.mimetype === "image/png" ||
+    file.mimetype === "image/jpg"
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
 const service = {
   uploadImage: () => {
     const upload = multer({
@@ -26,6 +38,8 @@ const service = {
           cb(null, `${prefix}_${file.originalname}`);
         },
       }),
+      limits: { fileSize: 1024 * 1024 * 2 },
+      fileFilter,
     });
     return upload;
   },

@@ -6,8 +6,8 @@ const config = require("../config/secretConfig");
 
 const authControllers = {
   register: (req, res) => {
-    const { userName, email, password, RoleId } = req.body;
-    if (!userName || !email || !password) {
+    const { fullName, userName, email, password, RoleId } = req.body;
+    if (!fullName || !userName || !email || !password) {
       return res.status(422).json({ message: "Please fill all blank" });
     }
     User.findOne({
@@ -23,6 +23,7 @@ const authControllers = {
         }
         bcrypt.hash(password, saltRounds, function (err, hash) {
           User.create({
+            fullName,
             userName,
             email,
             password: hash,
