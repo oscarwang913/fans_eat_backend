@@ -21,6 +21,6 @@ module.exports = {
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
     dialect: "mysql",
-    use_env_variable: "CLEARDB_DATABASE_URL",
+    use_env_variable: "JAWSDB_URL",
   },
 };
