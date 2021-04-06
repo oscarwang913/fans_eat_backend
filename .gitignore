@@ -1,3 +1,4 @@
 /node_modules
-/config/*
+/config/s3.env.js
+/config/secretConfig.js
 .env
