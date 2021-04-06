@@ -19,6 +19,7 @@ const checkLogInStatus = (req, res, next) => {
     }
     // put the decoded info to req
     req.userId = decoded.id;
+    req.userName = decoded.username;
     req.token = token;
     next();
   });

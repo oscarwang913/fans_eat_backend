@@ -30,7 +30,10 @@ const authControllers = {
             RoleId,
           })
             .then((result) => {
-              let token = jwt.sign({ id: result.id }, config.secret);
+              let token = jwt.sign(
+                { id: result.id, username: result.userName },
+                config.secret
+              );
               return res.status(200).json({
                 message: "Successfully register",
                 token,
@@ -73,6 +76,7 @@ const authControllers = {
             {
               email: user.email,
               id: user.id,
+              username: user.userName,
             },
             config.secret
           );

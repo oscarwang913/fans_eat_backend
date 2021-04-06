@@ -6,12 +6,14 @@ const verifyToken = require("../middlewares/verifyToken");
 
 router
   .route("/")
-  .get(verifyToken, postControllers.getAllOwnPosts)
+  .get(verifyToken, postControllers.getAllPosts)
   .post(
     verifyToken,
     service.uploadImage().single("imagePath"),
     postControllers.createPost
   );
+
+router.route("/users/:id").get(verifyToken, postControllers.getAllOwnPosts);
 
 router
   .route("/:id")
