@@ -1,5 +1,4 @@
 const { Rating_Like } = require("../models");
-
 const likeControllers = {
   addLike: (req, res) => {
     Rating_Like.create({
