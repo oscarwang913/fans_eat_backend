@@ -3,9 +3,21 @@ const env = require("../config/s3.env");
 const service = require("../middlewares/s3Service");
 const prefix = require("../utils");
 
+function pagination(limit, offset) {
+  let page = 0;
+  if (offset) {
+    page = (offset - 1) * (limit ? parseInt(limit) : 5);
+    return page;
+  }
+}
+
 const postControllers = {
   getAllPosts: (req, res) => {
-    Post.findAll({
+    const { limit, offset } = req.query;
+    Post.findAndCountAll({
+      order: [["createdAt", "DESC"]],
+      limit: parseInt(limit) || 5,
+      offset: parseInt(pagination(limit, offset)) || 0,
       attributes: [
         "id",
         "content",
@@ -19,11 +31,13 @@ const postControllers = {
           model: Rating_Like,
           required: false,
           attributes: [],
+          duplicating: false,
         },
         {
           model: User,
           required: false,
           attributes: ["id", "userName"],
+          duplicating: false,
         },
       ],
       group: ["Post.id"],
@@ -32,9 +46,11 @@ const postControllers = {
         if (!result) {
           return res.status(404).json({ message: "Posts are not exists" });
         }
-        return res
-          .status(200)
-          .json({ message: "Successfully fetch all posts", posts: result });
+        return res.status(200).json({
+          message: "Successfully fetch all posts",
+          posts: result.rows,
+          count: result.count.length,
+        });
       })
       .catch((err) => {
         return res.status(500).json({ err });
@@ -58,11 +74,13 @@ const postControllers = {
           model: Rating_Like,
           required: false,
           attributes: [],
+          duplicating: false,
         },
         {
           model: User,
           required: false,
           attributes: ["id", "userName"],
+          duplicating: false,
         },
       ],
       group: ["Post.id"],
@@ -119,6 +137,38 @@ const postControllers = {
         return res.status(500).json({ err });
       });
   },
+  getLikedPost: (req, res) => {
+    Rating_Like.findAndCountAll({
+      where: {
+        UserId: req.userId,
+      },
+      include: [
+        {
+          model: Post,
+          required: false,
+          attributes: ["id", "content", "imagePath"],
+        },
+        {
+          model: User,
+          required: false,
+          attributes: ["id", "userName"],
+        },
+      ],
+    })
+      .then((result) => {
+        if (!result) {
+          return res.status(404).json({ message: "Posts are not exists" });
+        }
+        return res.status(200).json({
+          message: "Successfully fetch liked posts",
+          posts: result,
+        });
+      })
+      .catch((err) => {
+        return res.status(500).json({ err });
+      });
+  },
+
   createPost: (req, res) => {
     if (!req.body.content || !req.file) {
       return res

@@ -1,8 +1,21 @@
 const { User } = require("../models");
 
+function pagination(limit, offset) {
+  let page = 0;
+  if (offset) {
+    page = (offset - 1) * (limit ? parseInt(limit) : 5);
+    return page;
+  }
+}
+
 const userControllers = {
   getAllUsers: (req, res) => {
-    User.findAll({})
+    const { limit, offset } = req.query;
+    User.findAll({
+      order: [["createdAt", "DESC"]],
+      limit: parseInt(limit) || 5,
+      offset: parseInt(pagination(limit, offset)) || 0,
+    })
       .then((users) => {
         return res.status(200).json({ message: "Fetch all users", users });
       })

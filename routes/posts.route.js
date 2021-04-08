@@ -14,6 +14,7 @@ router
   );
 
 router.route("/users/:id").get(verifyToken, postControllers.getAllOwnPosts);
+router.route("/likes").get(verifyToken, postControllers.getLikedPost);
 
 router
   .route("/:id")

@@ -103,11 +103,13 @@ const authControllers = {
       },
     })
       .then((user) => {
-        console.log(user);
         if (!user) {
           return res.status(404).send("No user found");
         }
-        res.status(200).send(user);
+        res.status(200).json({
+          message: "Successfully get the user",
+          user,
+        });
       })
       .catch((err) => {
         return res.status(500).send("There was a problem finding the user.");
