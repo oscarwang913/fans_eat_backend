@@ -26,7 +26,7 @@ const userControllers = {
   getUserById: (req, res) => {
     User.findOne({
       where: {
-        userName: req.params.id,
+        id: req.params.id,
       },
     })
       .then((user) => {
