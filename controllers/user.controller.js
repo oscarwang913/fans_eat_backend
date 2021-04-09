@@ -67,7 +67,7 @@ const userControllers = {
   updateUser: (req, res) => {
     User.findOne({
       where: {
-        userName: req.params.id,
+        id: req.params.id,
       },
     })
       .then((user) => {
@@ -92,7 +92,7 @@ const userControllers = {
   deleteUser: (req, res) => {
     User.destroy({
       where: {
-        userName: req.params.id,
+        id: req.params.id,
       },
     })
       .then(() => {
