@@ -26,7 +26,7 @@ const userControllers = {
   getUserById: (req, res) => {
     User.findOne({
       where: {
-        id: req.params.id,
+        userName: req.params.id,
       },
     })
       .then((user) => {
@@ -56,7 +56,7 @@ const userControllers = {
         });
         return res
           .status(200)
-          .json({ message: "Successfully update the user's auth" });
+          .json({ message: "Successfully update the user's auth", user });
       })
       .catch((err) => {
         return res
@@ -67,7 +67,7 @@ const userControllers = {
   updateUser: (req, res) => {
     User.findOne({
       where: {
-        id: req.params.id,
+        userName: req.params.id,
       },
     })
       .then((user) => {
@@ -75,11 +75,13 @@ const userControllers = {
           return res.status(404).send("User not found");
         }
         user.update({
+          fullName: req.body.fullName,
           userName: req.body.userName,
+          email: req.body.email,
         });
         return res
           .status(200)
-          .json({ message: "Successfully update the user's name" });
+          .json({ message: "Successfully update the user's name", user });
       })
       .catch((err) => {
         return res
@@ -90,7 +92,7 @@ const userControllers = {
   deleteUser: (req, res) => {
     User.destroy({
       where: {
-        id: req.params.id,
+        userName: req.params.id,
       },
     })
       .then(() => {
