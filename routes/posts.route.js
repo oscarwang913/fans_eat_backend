@@ -5,7 +5,7 @@ const service = require("../middlewares/s3Service");
 const verifyToken = require("../middlewares/verifyToken");
 
 router
-  .route("/")
+  .route("/all")
   .get(verifyToken, postControllers.getAllPosts)
   .post(
     verifyToken,

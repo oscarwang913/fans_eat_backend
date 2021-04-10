@@ -11,13 +11,8 @@ const server = http.createServer(app);
 const routes = require("./routes/index.route");
 
 app.use(helmet());
-const corsOptions = {
-  origin: "*",
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
-  allowedHeaders: ["Content-Type", "Authorization"],
-};
 
-app.use(cors(corsOptions));
+app.use(cors());
 // enable pre-flight
 app.options("*", cors());
 
