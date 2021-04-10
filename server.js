@@ -7,14 +7,16 @@ const PORT = process.env.PORT || 8080;
 
 const app = express();
 const server = http.createServer(app);
-
 const routes = require("./routes/index.route");
-
 app.use(helmet());
 
-app.use(cors());
-// enable pre-flight
-app.options("*", cors());
+const corsOptios = {
+  origin: "*",
+  method: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOptios));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
