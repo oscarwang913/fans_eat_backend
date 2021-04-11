@@ -170,7 +170,7 @@ const postControllers = {
   },
 
   createPost: (req, res) => {
-    if (!req.body.content || !req.file) {
+    if (!req.body.content) {
       return res
         .status(422)
         .json({ message: "Please fill the content or invalid file type" });
