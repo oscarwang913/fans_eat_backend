@@ -1,8 +1,6 @@
 const { User, Post, Rating_Like, Sequelize } = require("../models");
 const imgur = require("imgur-node-api");
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID;
-
-const service = require("../middlewares/s3Service");
 const prefix = require("../utils");
 
 function pagination(limit, offset) {
@@ -234,12 +232,6 @@ const postControllers = {
       },
     })
       .then((post) => {
-        const imagePathName = post.image.split("/").pop();
-        service.deleteImage(imagePathName, (err) => {
-          if (err) {
-            console.log(err);
-          }
-        });
         post.destroy().then(() => {
           res.status(200).json({ message: "Successfully delete the post" });
         });
