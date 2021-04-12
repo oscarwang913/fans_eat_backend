@@ -1,17 +1,13 @@
 const postControllers = require("../controllers/post.controller");
 const { Router } = require("express");
 const router = Router();
-const service = require("../middlewares/s3Service");
+const uploadService = require("../middlewares/uploadService");
 const verifyToken = require("../middlewares/verifyToken");
 
 router
-  .route("/all")
+  .route("/")
   .get(verifyToken, postControllers.getAllPosts)
-  .post(
-    verifyToken,
-    service.uploadImage().single("imagePath"),
-    postControllers.createPost
-  );
+  .post(verifyToken, uploadService.single("image"), postControllers.createPost);
 
 router.route("/users/:id").get(verifyToken, postControllers.getAllOwnPosts);
 router.route("/likes").get(verifyToken, postControllers.getLikedPost);

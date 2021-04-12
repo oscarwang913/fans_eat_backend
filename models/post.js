@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
   Post.init(
     {
       content: DataTypes.TEXT,
-      imagePath: DataTypes.STRING,
+      image: DataTypes.STRING,
       postStatus: DataTypes.BOOLEAN,
       UserId: DataTypes.INTEGER,
     },

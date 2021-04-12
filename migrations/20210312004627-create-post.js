@@ -11,7 +11,7 @@ module.exports = {
       content: {
         type: Sequelize.TEXT,
       },
-      imagePath: {
+      image: {
         type: Sequelize.STRING,
       },
       postStatus: {

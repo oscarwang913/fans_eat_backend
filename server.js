@@ -9,15 +9,7 @@ const app = express();
 const server = http.createServer(app);
 const routes = require("./routes/index.route");
 app.use(helmet());
-
-// const corsOptios = {
-//   origin: "*",
-//   method: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
-//   allowedHeaders: ["Content-Type", "Authorization"],
-// };
-
 app.use(cors());
-
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(logger("dev"));

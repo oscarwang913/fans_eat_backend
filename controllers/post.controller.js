@@ -1,5 +1,7 @@
 const { User, Post, Rating_Like, Sequelize } = require("../models");
-const env = require("../config/s3.env");
+const imgur = require("imgur-node-api");
+const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID;
+
 const service = require("../middlewares/s3Service");
 const prefix = require("../utils");
 
@@ -21,7 +23,7 @@ const postControllers = {
       attributes: [
         "id",
         "content",
-        "imagePath",
+        "image",
         "postStatus",
         "createdAt",
         [Sequelize.fn("COUNT", Sequelize.col("rating_likes.PostId")), "Total"],
@@ -64,7 +66,7 @@ const postControllers = {
       attributes: [
         "id",
         "content",
-        "imagePath",
+        "image",
         "postStatus",
         "createdAt",
         [Sequelize.fn("COUNT", Sequelize.col("rating_likes.PostId")), "Total"],
@@ -105,7 +107,7 @@ const postControllers = {
       attributes: [
         "id",
         "content",
-        "imagePath",
+        "image",
         "createdAt",
         [Sequelize.fn("COUNT", Sequelize.col("rating_likes.PostId")), "Total"],
       ],
@@ -146,7 +148,7 @@ const postControllers = {
         {
           model: Post,
           required: false,
-          attributes: ["id", "content", "imagePath"],
+          attributes: ["id", "content", "image"],
         },
         {
           model: User,
@@ -170,27 +172,32 @@ const postControllers = {
   },
 
   createPost: (req, res) => {
-    if (!req.body.content) {
-      return res
-        .status(422)
-        .json({ message: "Please fill the content or invalid file type" });
-    }
-
-    // put the userid which is in the isAuth into the UserId for connecting post and verified user
-    Post.create({
-      content: req.body.content,
-      imagePath: `https://${env.Bucket}.s3.amazonaws.com/${prefix}_${req.file.originalname}`,
-      UserId: req.userId,
-    })
-      .then((result) => {
-        return res.status(201).json({
-          message: "Successfully create a post",
-          post: result,
+    const { content } = req.body;
+    const { file } = req;
+    if (file) {
+      imgur.setClientID(IMGUR_CLIENT_ID);
+      let imgurUpload = new Promise((resolve, reject) => {
+        imgur.upload(file.path, (err, img) => {
+          return resolve(img);
         });
-      })
-      .catch((err) => {
-        return res.status(500).json({ err: err });
       });
+      imgurUpload.then((img) => {
+        Post.create({
+          content: content,
+          image: img.data.link,
+          UserId: req.userId,
+        })
+          .then((result) => {
+            return res.status(201).json({
+              message: "Successfully create a post",
+              post: result,
+            });
+          })
+          .catch((err) => {
+            return res.status(500).json({ err: err });
+          });
+      });
+    }
   },
   updatePost: (req, res) => {
     if (!req.body.content) {
@@ -227,7 +234,7 @@ const postControllers = {
       },
     })
       .then((post) => {
-        const imagePathName = post.imagePath.split("/").pop();
+        const imagePathName = post.image.split("/").pop();
         service.deleteImage(imagePathName, (err) => {
           if (err) {
             console.log(err);
