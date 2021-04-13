@@ -9,16 +9,16 @@ const app = express();
 const server = http.createServer(app);
 const routes = require("./routes/index.route");
 app.use(helmet());
-let allowCrossDomain = function (req, res, next) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  res.setHeader("Access-Control-Allow-Credentials", true);
-  next();
+const corsOpts = {
+  origin: "*",
+
+  methods: ["GET", "POST"],
+
+  allowedHeaders: ["Content-Type"],
 };
 
-// app.use(cors());
-// app.options("*", cors());
+app.use(cors(corsOpts));
+app.options("*", cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(logger("dev"));
