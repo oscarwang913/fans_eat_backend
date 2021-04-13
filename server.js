@@ -11,10 +11,9 @@ const routes = require("./routes/index.route");
 app.use(helmet());
 const corsOpts = {
   origin: "*",
-
   methods: ["GET", "POST"],
-
-  allowedHeaders: ["Content-Type"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
 };
 
 app.use(cors(corsOpts));
