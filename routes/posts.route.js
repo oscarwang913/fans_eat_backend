@@ -3,11 +3,17 @@ const { Router } = require("express");
 const router = Router();
 const uploadService = require("../middlewares/uploadService");
 const verifyToken = require("../middlewares/verifyToken");
+const cors = require("cors");
 
 router
   .route("/")
   .get(verifyToken, postControllers.getAllPosts)
-  .post(verifyToken, uploadService.single("image"), postControllers.createPost);
+  .post(
+    verifyToken,
+    cors(),
+    uploadService.single("image"),
+    postControllers.createPost
+  );
 
 router.route("/users/:id").get(verifyToken, postControllers.getAllOwnPosts);
 router.route("/likes").get(verifyToken, postControllers.getLikedPost);
