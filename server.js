@@ -23,7 +23,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(logger("dev"));
 // user `use` to ensure the get all http req
-app.use(allowCrossDomain);
 app.use("/api", routes);
 
 server.listen(PORT, () => {
