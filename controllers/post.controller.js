@@ -44,16 +44,19 @@ const postControllers = {
     })
       .then((result) => {
         if (!result) {
-          return res.status(404).json({ message: "Posts are not exists" });
+          return res
+            .status(404)
+            .json({ success: false, message: "Posts are not exists" });
         }
         return res.status(200).json({
+          success: true,
           message: "Successfully fetch all posts",
           posts: result.rows,
           count: result.count.length,
         });
       })
       .catch((err) => {
-        return res.status(500).json({ err });
+        return res.status(500).json({ success: false, err });
       });
   },
   getAllOwnPosts: (req, res) => {
@@ -87,15 +90,18 @@ const postControllers = {
     })
       .then((result) => {
         if (!result) {
-          return res.status(404).json({ message: "Posts are not exists" });
+          return res
+            .status(404)
+            .json({ success: false, message: "Posts are not exists" });
         }
         return res.status(200).json({
+          success: true,
           message: "Successfully fetch all your posts",
           posts: result,
         });
       })
       .catch((err) => {
-        return res.status(500).json({ err });
+        return res.status(500).json({ success: false, err });
       });
   },
   getPostById: (req, res) => {
@@ -125,16 +131,19 @@ const postControllers = {
     })
       .then((result) => {
         if (!result) {
-          return res
-            .status(404)
-            .json({ message: "Post with this id is not exists" });
+          return res.status(404).json({
+            success: false,
+            message: "Post with this id is not exists",
+          });
         }
-        return res
-          .status(200)
-          .json({ message: "Successfully fetch the post", post: result });
+        return res.status(200).json({
+          success: true,
+          message: "Successfully fetch the post",
+          post: result,
+        });
       })
       .catch((err) => {
-        return res.status(500).json({ err });
+        return res.status(500).json({ success: false, err });
       });
   },
   getLikedPost: (req, res) => {
@@ -157,15 +166,18 @@ const postControllers = {
     })
       .then((result) => {
         if (!result) {
-          return res.status(404).json({ message: "Posts are not exists" });
+          return res
+            .status(404)
+            .json({ success: false, message: "Posts are not exists" });
         }
         return res.status(200).json({
+          success: true,
           message: "Successfully fetch liked posts",
           posts: result,
         });
       })
       .catch((err) => {
-        return res.status(500).json({ err });
+        return res.status(500).json({ success: false, err });
       });
   },
 
@@ -187,12 +199,13 @@ const postControllers = {
         })
           .then((result) => {
             return res.status(201).json({
+              success: true,
               message: "Successfully create a post",
               post: result,
             });
           })
           .catch((err) => {
-            return res.status(500).json({ err: err });
+            return res.status(500).json({ success: false, err: err });
           });
       });
     }
@@ -209,19 +222,22 @@ const postControllers = {
     })
       .then((post) => {
         if (!post) {
-          return res
-            .status(404)
-            .json({ message: "Post with this id is not exists" });
+          return res.status(404).json({
+            success: false,
+            message: "Post with this id is not exists",
+          });
         }
         post.update({
           content: req.body.content,
         });
-        return res
-          .status(200)
-          .json({ message: "Successfully update the post", post });
+        return res.status(200).json({
+          success: true,
+          message: "Successfully update the post",
+          post,
+        });
       })
       .catch((err) => {
-        return res.status(500).json({ err });
+        return res.status(500).json({ success: false, err });
       });
   },
   deletePost: (req, res) => {
@@ -233,7 +249,9 @@ const postControllers = {
     })
       .then((post) => {
         post.destroy().then(() => {
-          res.status(200).json({ message: "Successfully delete the post" });
+          res
+            .status(200)
+            .json({ success: true, message: "Successfully delete the post" });
         });
       })
       .catch((err) => {

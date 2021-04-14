@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const config = require("../config/secretConfig");
+const config = process.env.SECRET;
 
 const checkLogInStatus = (req, res, next) => {
   let token = req.headers["authorization"];

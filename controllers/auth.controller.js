@@ -2,7 +2,7 @@ const { User } = require("../models");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const jwt = require("jsonwebtoken");
-const config = require("../config/secretConfig");
+const config = process.env.SECRET;
 
 const authControllers = {
   register: (req, res) => {
@@ -17,9 +17,10 @@ const authControllers = {
     })
       .then((user) => {
         if (user) {
-          return res
-            .status(422)
-            .json({ message: "The user with this email has already register" });
+          return res.status(422).json({
+            message: "The user with this email has already register",
+            success: false,
+          });
         }
         bcrypt.hash(password, saltRounds, function (err, hash) {
           User.create({
@@ -35,27 +36,33 @@ const authControllers = {
                 config.secret
               );
               return res.status(200).json({
+                success: true,
                 message: "Successfully register",
                 token,
               });
             })
             .catch((err) => {
-              return res.status(500).json({ message: "Some error occur", err });
+              return res
+                .status(500)
+                .json({ success: false, message: "Some error occur", err });
             });
         });
       })
       .catch((err) => {
-        return res
-          .status(500)
-          .json({ message: "Can not register at the moment", err });
+        return res.status(500).json({
+          success: false,
+          message: "Can not register at the moment",
+          err,
+        });
       });
   },
   login: (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {
-      return res
-        .status(422)
-        .json({ message: "Please fill your email and password" });
+      return res.status(422).json({
+        success: false,
+        message: "Please fill your email and password",
+      });
     }
     User.findOne({
       where: {
@@ -64,9 +71,10 @@ const authControllers = {
     })
       .then((user) => {
         if (!user) {
-          return res
-            .status(401)
-            .json({ message: "A user with this email could not be found" });
+          return res.status(401).json({
+            success: false,
+            message: "A user with this email could not be found",
+          });
         }
         bcrypt.compare(password, user.password, function (err, result) {
           if (!result) {
@@ -81,15 +89,18 @@ const authControllers = {
             config.secret
           );
           return res.status(200).json({
+            success: true,
             message: "Successfully login",
             token,
           });
         });
       })
       .catch((err) => {
-        return res
-          .status(500)
-          .json({ message: "Can not login at the moment", err });
+        return res.status(500).json({
+          success: false,
+          message: "Can not login at the moment",
+          err,
+        });
       });
   },
   logout: (req, res) => {
@@ -104,9 +115,12 @@ const authControllers = {
     })
       .then((user) => {
         if (!user) {
-          return res.status(404).send("No user found");
+          return res
+            .status(404)
+            .json({ success: false, message: "No user found" });
         }
         res.status(200).json({
+          success: true,
           message: "Successfully get the user",
           user,
         });

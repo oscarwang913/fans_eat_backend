@@ -6,10 +6,10 @@ const likeControllers = {
       PostId: req.body.postId,
     })
       .then(() => {
-        return res.send("Like!");
+        return res.json({ success: true, message: "Like!" });
       })
       .catch((err) => {
-        return res.status(500).json({ err });
+        return res.status(500).json({ success: false, err });
       });
   },
 };

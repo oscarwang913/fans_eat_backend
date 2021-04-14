@@ -17,10 +17,12 @@ const userControllers = {
       offset: parseInt(pagination(limit, offset)) || 0,
     })
       .then((users) => {
-        return res.status(200).json({ message: "Fetch all users", users });
+        return res
+          .status(200)
+          .json({ success: true, message: "Fetch all users", users });
       })
       .catch((err) => {
-        return res.status(500).json({ err });
+        return res.status(500).json({ success: false, err });
       });
   },
   getUserById: (req, res) => {
@@ -31,14 +33,20 @@ const userControllers = {
     })
       .then((user) => {
         if (!user) {
-          return res.status(404).send("User not found");
+          return res
+            .status(404)
+            .json({ success: false, message: "User not found" });
         }
-        return res.status(200).json({ message: "Fetch the user", user });
+        return res
+          .status(200)
+          .json({ success: true, message: "Fetch the user", user });
       })
       .catch((err) => {
-        return res
-          .status(500)
-          .json({ message: "Can not fetch the user at the moment", err });
+        return res.status(500).json({
+          success: false,
+          message: "Can not fetch the user at the moment",
+          err,
+        });
       });
   },
   updateUserAuth: (req, res) => {
@@ -49,19 +57,24 @@ const userControllers = {
     })
       .then((user) => {
         if (!user) {
-          return res.status(404).send("User not found");
+          return res
+            .status(404)
+            .json({ success: false, message: "User not found" });
         }
         user.update({
           RoleId: req.body.roleId,
         });
-        return res
-          .status(200)
-          .json({ message: "Successfully update the user's auth", user });
+        return res.status(200).json({
+          success: true,
+          message: "Successfully update the user's auth",
+          user,
+        });
       })
       .catch((err) => {
-        return res
-          .status(500)
-          .json({ message: "Can not update user at the moment" });
+        return res.status(500).json({
+          success: false,
+          message: "Can not update user at the moment",
+        });
       });
   },
   updateUser: (req, res) => {
@@ -72,21 +85,26 @@ const userControllers = {
     })
       .then((user) => {
         if (!user) {
-          return res.status(404).send("User not found");
+          return res
+            .status(404)
+            .json({ success: false, message: "User not updated" });
         }
         user.update({
           fullName: req.body.fullName,
           userName: req.body.userName,
           email: req.body.email,
         });
-        return res
-          .status(200)
-          .json({ message: "Successfully update the user's name", user });
+        return res.status(200).json({
+          success: true,
+          message: "Successfully update the user's name",
+          user,
+        });
       })
       .catch((err) => {
-        return res
-          .status(500)
-          .json({ message: "Can not update user at the moment" });
+        return res.status(500).json({
+          success: false,
+          message: "Can not update user at the moment",
+        });
       });
   },
   deleteUser: (req, res) => {
@@ -96,10 +114,10 @@ const userControllers = {
       },
     })
       .then(() => {
-        return res.status(204).send("User deleted");
+        return res.status(204).json({ success: true, message: "User deleted" });
       })
       .catch((err) => {
-        return res.status(500).send(err);
+        return res.status(500).json({ success: false, err });
       });
   },
 };
