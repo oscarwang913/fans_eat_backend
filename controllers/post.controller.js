@@ -184,31 +184,50 @@ const postControllers = {
   createPost: (req, res) => {
     const { content } = req.body;
     const { file } = req;
-    if (file) {
-      imgur.setClientID(IMGUR_CLIENT_ID);
-      let imgurUpload = new Promise((resolve, reject) => {
-        imgur.upload(file.path, (err, img) => {
-          return resolve(img);
-        });
-      });
-      imgurUpload.then((img) => {
-        Post.create({
-          content: content,
-          image: img.data.link,
-          UserId: req.userId,
-        })
-          .then((result) => {
-            return res.status(201).json({
-              success: true,
-              message: "Successfully create a post",
-              post: result,
-            });
-          })
-          .catch((err) => {
-            return res.status(500).json({ success: false, err: err });
-          });
-      });
+    if (!content) {
+      return res.status(422).json({ message: "Please fill content" });
     }
+    Post.create({
+      content: content,
+      image: `https://img-upload-storage.s3.amazonaws.com/${prefix}_${file.originalname}`,
+      UserId: req.userId,
+    })
+      .then((result) => {
+        return res.status(201).json({
+          success: true,
+          message: "Successfully create a post",
+          post: result,
+        });
+      })
+      .catch((err) => {
+        return res.status(500).json({ success: false, err: err });
+      });
+
+    // if (file) {
+    //   imgur.setClientID(IMGUR_CLIENT_ID);
+    //   let imgurUpload = new Promise((resolve, reject) => {
+    //     imgur.upload(file.path, (err, img) => {
+    //       return resolve(img);
+    //     });
+    //   });
+    //   imgurUpload.then((img) => {
+    //     Post.create({
+    //       content: content,
+    //       image: img.data.link,
+    //       UserId: req.userId,
+    //     })
+    //       .then((result) => {
+    //         return res.status(201).json({
+    //           success: true,
+    //           message: "Successfully create a post",
+    //           post: result,
+    //         });
+    //       })
+    //       .catch((err) => {
+    //         return res.status(500).json({ success: false, err: err });
+    //       });
+    //   });
+    // }
   },
   updatePost: (req, res) => {
     if (!req.body.content) {
