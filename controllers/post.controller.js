@@ -1,7 +1,6 @@
 const { User, Post, Rating_Like, Sequelize } = require("../models");
-const imgur = require("imgur-node-api");
-const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID;
 const prefix = require("../utils");
+const service = require("../middlewares/s3Service");
 
 function pagination(limit, offset) {
   let page = 0;
@@ -202,32 +201,6 @@ const postControllers = {
       .catch((err) => {
         return res.status(500).json({ success: false, err: err });
       });
-
-    // if (file) {
-    //   imgur.setClientID(IMGUR_CLIENT_ID);
-    //   let imgurUpload = new Promise((resolve, reject) => {
-    //     imgur.upload(file.path, (err, img) => {
-    //       return resolve(img);
-    //     });
-    //   });
-    //   imgurUpload.then((img) => {
-    //     Post.create({
-    //       content: content,
-    //       image: img.data.link,
-    //       UserId: req.userId,
-    //     })
-    //       .then((result) => {
-    //         return res.status(201).json({
-    //           success: true,
-    //           message: "Successfully create a post",
-    //           post: result,
-    //         });
-    //       })
-    //       .catch((err) => {
-    //         return res.status(500).json({ success: false, err: err });
-    //       });
-    //   });
-    // }
   },
   updatePost: (req, res) => {
     if (!req.body.content) {
@@ -267,6 +240,12 @@ const postControllers = {
       },
     })
       .then((post) => {
+        const imagePathName = post.imagePath.split("/").pop();
+        service.deleteImage(imagePathName, (err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
         post.destroy().then(() => {
           res
             .status(200)
