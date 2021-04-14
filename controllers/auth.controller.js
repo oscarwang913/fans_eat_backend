@@ -33,7 +33,7 @@ const authControllers = {
             .then((result) => {
               let token = jwt.sign(
                 { id: result.id, username: result.userName },
-                config.secret
+                config
               );
               return res.status(200).json({
                 success: true,
@@ -86,7 +86,7 @@ const authControllers = {
               id: user.id,
               username: user.userName,
             },
-            config.secret
+            config
           );
           return res.status(200).json({
             success: true,

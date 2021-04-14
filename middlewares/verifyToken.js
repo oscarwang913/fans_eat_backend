@@ -10,7 +10,7 @@ const checkLogInStatus = (req, res, next) => {
       .status(403)
       .send({ auth: false, message: "Please login or register" });
   }
-  jwt.verify(token, config.secret, (err, decoded) => {
+  jwt.verify(token, config, (err, decoded) => {
     if (err) {
       return res.status(500).send({
         auth: false,
