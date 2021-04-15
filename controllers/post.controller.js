@@ -5,7 +5,7 @@ const service = require("../middlewares/s3Service");
 function pagination(limit, offset) {
   let page = 0;
   if (offset) {
-    page = (offset - 1) * (limit ? parseInt(limit) : 5);
+    page = (offset - 1) * (limit ? parseInt(limit) : 6);
     return page;
   }
 }
@@ -15,7 +15,7 @@ const postControllers = {
     const { limit, offset } = req.query;
     Post.findAndCountAll({
       order: [["createdAt", "DESC"]],
-      limit: parseInt(limit) || 5,
+      limit: parseInt(limit) || 12,
       offset: parseInt(pagination(limit, offset)) || 0,
       attributes: [
         "id",
@@ -254,6 +254,18 @@ const postControllers = {
       })
       .catch((err) => {
         console.log(err);
+      });
+  },
+  addLike: (req, res) => {
+    Rating_Like.create({
+      UserId: req.userId,
+      PostId: req.body.postId,
+    })
+      .then(() => {
+        return res.json({ success: true, message: "Like!" });
+      })
+      .catch((err) => {
+        return res.status(500).json({ success: false, err });
       });
   },
 };
