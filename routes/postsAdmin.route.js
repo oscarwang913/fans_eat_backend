@@ -14,7 +14,6 @@ router
 
 router
   .route("/:id")
-  .put(verifyToken, checkIdentity.isPostBoardAdmin, postControllers.updatePost)
   .delete(
     verifyToken,
     checkIdentity.isPostBoardAdmin,
