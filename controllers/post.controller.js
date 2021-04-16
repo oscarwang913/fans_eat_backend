@@ -145,7 +145,21 @@ const postControllers = {
         return res.status(500).json({ success: false, err });
       });
   },
-  getLikedPost: (req, res) => {
+  getLikeCount: (req, res) => {
+    Rating_Like.findAll({})
+      .then((result) => {
+        return res.status(200).json({
+          success: true,
+          message: "Fetch all likes",
+          result: result.length,
+        });
+      })
+      .catch((err) => {
+        return res.status(500).json({ success: false, err });
+      });
+  },
+
+  getOwnLikedPost: (req, res) => {
     Rating_Like.findAndCountAll({
       where: {
         UserId: req.userId,
