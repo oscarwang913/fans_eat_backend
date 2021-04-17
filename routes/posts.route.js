@@ -19,12 +19,13 @@ router
   .put(verifyToken, postControllers.updatePost)
   .delete(verifyToken, postControllers.deletePost);
 
+router.route("/users/:id").get(verifyToken, postControllers.getAllOwnPosts);
+
 router
   .route("/likes")
   .get(verifyToken, postControllers.getOwnLikedPost)
   .post(verifyToken, postControllers.addLike);
 
 router.route("/likes/all").get(verifyToken, postControllers.getLikeCount);
-router.route("/users/:id").get(verifyToken, postControllers.getAllOwnPosts);
 
 module.exports = router;

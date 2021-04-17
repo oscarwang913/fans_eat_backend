@@ -6,23 +6,11 @@ const checkIdentity = require("../middlewares/checkIdentity");
 
 router
   .route("/")
-  .get(
-    verifyToken,
-    checkIdentity.isUserBoardAdmin,
-    userControllers.getAllUsers
-  );
-
-router
-  .route("/:id")
+  .get(verifyToken, checkIdentity.isUserBoardAdmin, userControllers.getAllUsers)
   .patch(
     verifyToken,
     checkIdentity.isUserBoardAdmin,
     userControllers.updateUserAuth
-  )
-  .delete(
-    verifyToken,
-    checkIdentity.isUserBoardAdmin,
-    userControllers.deleteUser
   );
 
 module.exports = router;

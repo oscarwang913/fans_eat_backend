@@ -1,20 +1,20 @@
 const { User } = require("../models");
 
-function pagination(limit, offset) {
-  let page = 0;
-  if (offset) {
-    page = (offset - 1) * (limit ? parseInt(limit) : 5);
-    return page;
+function pagination(limit, page) {
+  let offset = 0;
+  if (page) {
+    offset = (page - 1) * (limit ? parseInt(limit) : 5);
+    return offset;
   }
 }
 
 const userControllers = {
   getAllUsers: (req, res) => {
-    const { limit, offset } = req.query;
+    const { limit, page } = req.query;
     User.findAll({
       order: [["createdAt", "DESC"]],
       limit: parseInt(limit) || 5,
-      offset: parseInt(pagination(limit, offset)) || 0,
+      offset: parseInt(pagination(limit, page)) || 0,
     })
       .then((users) => {
         return res
