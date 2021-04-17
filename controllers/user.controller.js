@@ -12,7 +12,7 @@ const userControllers = {
   getAllUsers: (req, res) => {
     const { limit, page } = req.query;
     User.findAll({
-      order: [["createdAt", "DESC"]],
+      order: [["id"]],
       limit: parseInt(limit) || 5,
       offset: parseInt(pagination(limit, page)) || 0,
     })
