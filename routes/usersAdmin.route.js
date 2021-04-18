@@ -16,5 +16,12 @@ router
     checkIdentity.isUserBoardAdmin,
     userAdminControllers.updateUserAuth
   );
+router
+  .route("/count")
+  .get(
+    verifyToken,
+    checkIdentity.isUserBoardAdmin,
+    userAdminControllers.getTotalUserCount
+  );
 
 module.exports = router;

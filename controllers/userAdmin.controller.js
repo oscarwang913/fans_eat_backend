@@ -9,6 +9,19 @@ function pagination(limit, page) {
 }
 
 const userAdminControllers = {
+  getTotalUserCount: (req, res) => {
+    User.findAll({})
+      .then((users) => {
+        return res.status(200).json({
+          success: true,
+          message: "Fetch all users",
+          usersCount: users.length,
+        });
+      })
+      .catch((err) => {
+        return res.status(500).json({ success: false, err });
+      });
+  },
   getAllUsers: (req, res) => {
     const { limit, page } = req.query;
     User.findAll({
@@ -21,7 +34,7 @@ const userAdminControllers = {
           success: true,
           message: "Fetch all users",
           users,
-          count: users.length,
+          usersCount: users.length,
         });
       })
       .catch((err) => {
