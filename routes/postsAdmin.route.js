@@ -1,4 +1,4 @@
-const postControllers = require("../controllers/post.controller");
+const postAdminControllers = require("../controllers/postAdmin.controller");
 const { Router } = require("express");
 const router = Router();
 const verifyToken = require("../middlewares/verifyToken");
@@ -9,7 +9,7 @@ router
   .get(
     verifyToken,
     checkIdentity.isPostBoardAdmin,
-    postControllers.getAllPosts
+    postAdminControllers.getAllPosts
   );
 
 router
@@ -17,6 +17,6 @@ router
   .delete(
     verifyToken,
     checkIdentity.isPostBoardAdmin,
-    postControllers.deletePost
+    postAdminControllers.deletePost
   );
 module.exports = router;

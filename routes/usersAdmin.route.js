@@ -1,4 +1,4 @@
-const userControllers = require("../controllers/user.controller");
+const userAdminControllers = require("../controllers/userAdmin.controller");
 const { Router } = require("express");
 const router = Router();
 const verifyToken = require("../middlewares/verifyToken");
@@ -6,11 +6,15 @@ const checkIdentity = require("../middlewares/checkIdentity");
 
 router
   .route("/")
-  .get(verifyToken, checkIdentity.isUserBoardAdmin, userControllers.getAllUsers)
+  .get(
+    verifyToken,
+    checkIdentity.isUserBoardAdmin,
+    userAdminControllers.getAllUsers
+  )
   .patch(
     verifyToken,
     checkIdentity.isUserBoardAdmin,
-    userControllers.updateUserAuth
+    userAdminControllers.updateUserAuth
   );
 
 module.exports = router;

@@ -16,16 +16,14 @@ router
 router
   .route("/:id")
   .get(verifyToken, postControllers.getPostById)
-  .put(verifyToken, postControllers.updatePost)
-  .delete(verifyToken, postControllers.deletePost);
+  .put(verifyToken, postControllers.updatePost);
 
 router.route("/users/:id").get(verifyToken, postControllers.getAllOwnPosts);
 
+router.route("/likes/all").get(verifyToken, postControllers.getLikeCount);
 router
   .route("/likes")
   .get(verifyToken, postControllers.getOwnLikedPost)
   .post(verifyToken, postControllers.addLike);
-
-router.route("/likes/all").get(verifyToken, postControllers.getLikeCount);
 
 module.exports = router;

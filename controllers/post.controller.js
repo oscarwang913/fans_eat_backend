@@ -246,30 +246,6 @@ const postControllers = {
         return res.status(500).json({ success: false, err });
       });
   },
-  deletePost: (req, res) => {
-    Post.findOne({
-      where: {
-        id: req.params.id,
-        UserId: req.userId,
-      },
-    })
-      .then((post) => {
-        const imagePathName = post.imagePath.split("/").pop();
-        service.deleteImage(imagePathName, (err) => {
-          if (err) {
-            console.log(err);
-          }
-        });
-        post.destroy().then(() => {
-          res
-            .status(200)
-            .json({ success: true, message: "Successfully delete the post" });
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  },
   addLike: (req, res) => {
     Rating_Like.findOne({
       where: {
