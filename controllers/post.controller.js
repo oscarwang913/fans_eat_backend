@@ -271,6 +271,19 @@ const postControllers = {
         });
     });
   },
+  getTotalPostCount: (req, res) => {
+    Post.findAll({})
+      .then((posts) => {
+        return res.status(200).json({
+          success: true,
+          message: "Fetch all posts",
+          count: posts.length,
+        });
+      })
+      .catch((err) => {
+        return res.status(500).json({ success: false, err });
+      });
+  },
 };
 
 module.exports = postControllers;

@@ -13,17 +13,17 @@ router
     postControllers.createPost
   );
 
-router
-  .route("/:id")
-  .get(verifyToken, postControllers.getPostById)
-  .put(verifyToken, postControllers.updatePost);
-
 router.route("/users/:id").get(verifyToken, postControllers.getAllOwnPosts);
-
+router.route("/count").get(verifyToken, postControllers.getTotalPostCount);
 router.route("/likes/all").get(verifyToken, postControllers.getLikeCount);
 router
   .route("/likes")
   .get(verifyToken, postControllers.getOwnLikedPost)
   .post(verifyToken, postControllers.addLike);
+
+router
+  .route("/:id")
+  .get(verifyToken, postControllers.getPostById)
+  .put(verifyToken, postControllers.updatePost);
 
 module.exports = router;
