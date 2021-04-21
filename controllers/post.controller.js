@@ -103,7 +103,7 @@ const postControllers = {
       });
   },
   getPostById: (req, res) => {
-    const { id } = req.params;
+    const { id } = req.body;
     Post.findOne({
       where: { id },
       attributes: [
