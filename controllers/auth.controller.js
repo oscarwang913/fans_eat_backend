@@ -78,7 +78,9 @@ const authControllers = {
         }
         bcrypt.compare(password, user.password, function (err, result) {
           if (!result) {
-            return res.status(401).json({ message: "Incorrect password" });
+            return res
+              .status(401)
+              .json({ success: false, message: "Incorrect password" });
           }
           const token = jwt.sign(
             {
