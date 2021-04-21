@@ -1,5 +1,4 @@
 const { User, Post, Rating_Like, Sequelize } = require("../models");
-const prefix = require("../utils");
 const service = require("../middlewares/s3Service");
 
 function pagination(limit, page) {

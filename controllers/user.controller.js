@@ -55,19 +55,6 @@ const userControllers = {
         });
       });
   },
-  deleteUser: (req, res) => {
-    User.destroy({
-      where: {
-        id: req.params.id,
-      },
-    })
-      .then(() => {
-        return res.status(204).json({ success: true, message: "User deleted" });
-      })
-      .catch((err) => {
-        return res.status(500).json({ success: false, err });
-      });
-  },
 };
 
 module.exports = userControllers;

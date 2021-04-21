@@ -13,13 +13,9 @@ router
     postControllers.createPost
   );
 
-router.route("/users/:id").get(verifyToken, postControllers.getAllOwnPosts);
+router.route("/all/:id").get(verifyToken, postControllers.getAllOwnPosts);
 router.route("/count").get(verifyToken, postControllers.getTotalPostCount);
-router.route("/likes/all").get(verifyToken, postControllers.getLikeCount);
-router
-  .route("/likes")
-  .get(verifyToken, postControllers.getOwnLikedPost)
-  .post(verifyToken, postControllers.addLike);
+router.route("/likes").get(verifyToken, postControllers.getOwnLikedPost);
 
 router
   .route("/:id")
