@@ -12,7 +12,7 @@
   "author": "Oscar Wang",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.848.0",
+    "aws-sdk": "^2.1135.0",
     "bcrypt": "^5.0.0",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
